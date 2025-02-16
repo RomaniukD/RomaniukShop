@@ -33,43 +33,29 @@ export const getAll = async (req, res) => {
 
 export const getOne = async (req, res) => {
     try {
-        const postId = req.params.id
+        const postId = req.params.id; 
 
-        PostModel.findOneAndUpdate(
-        {
-            _id: postId,
-        },
-        {
-            $inc: { viewsCount: 1},
-        },
-        {
-            returnDocument: 'after',
-        },
-        (err, doc) => {
-            if(err) {
-                console.log(err);
-                return res.status(500).json({
-                message: "Не вдалось повернути статтю"        
-                });
-            }
+        const doc = await PostModel.findOneAndUpdate(
+            { _id: postId },
+            { $inc: { viewsCount: 1 } },
+            { new: true }
+        );
 
-            if (!doc) {
-                return res.status(404).json({
-                    message: "Стаття не знайдена"
-                })
-            }
-            res.json(doc);
+        if (!doc) {
+            return res.status(404).json({
+                message: "Стаття не знайдена"
+            });
         }
-    )
 
-    } catch(err) {
-        console.warn(err);
+        res.json(doc);
+    } catch (err) {
+        console.error(err);
         res.status(500).json({
-            message: "Не вдалось отримати статті"        
-    });
+            message: "Не вдалось отримати статтю"
+        });
+    }
 };
 
-}
 
 export const remove = async (req, res) => {
     try {
