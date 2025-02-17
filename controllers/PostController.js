@@ -89,7 +89,7 @@ export const create = async (req, res) => {
             title: req.body.title,
             text: req.body.text,
             imageUrl: req.body.imageUrl,
-            tags: req.body.tags,
+            tags: req.body.tags.split(','),
             user: req.userId,
         });
 
@@ -108,14 +108,16 @@ export const update = async (req, res) => {
     try {
         const postId = req.params.id;
 
-        await PostModel.updateOne({
+        await PostModel.updateOne(
+            {
             _id: postId 
-        }, {
+            }, 
+            {
             title: req.body.title,
             text: req.body.text,
             imageUrl: req.body.imageUrl,
-            tags: req.body.tags,
-        }
+            tags: req.body.tags.split(','),
+            }
     
     );
 

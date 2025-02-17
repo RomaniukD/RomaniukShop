@@ -23,7 +23,6 @@ const storage = multer.diskStorage({
     },
     filename: (_,file, cb) => {
         cb(null, 
-            // Data.now() + '-' + 
             file.originalname);
     },
 });
